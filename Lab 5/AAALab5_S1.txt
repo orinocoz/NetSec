@@ -1,0 +1,142 @@
+spanning-tree guard rootbpduguard enable                              d end | show run
+                ^
+% Invalid input detected at '^' marker.
+
+S1(config-if)#end | show run          
+S1#show ru
+*Mar  1 00:25:38.495: %SYS-5-CONFIG_I: Configured from console by consolen
+Building configuration...
+
+Current configuration : 1935 bytes
+!
+! Last configuration change at 00:25:38 UTC Mon Mar 1 1993
+!
+version 15.2
+no service pad
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+!
+hostname S1
+!
+boot-start-marker
+boot-end-marker
+!
+!
+no aaa new-model
+system mtu routing 1500
+vtp mode transparent
+!
+!
+!
+ --More--         !
+!
+!
+!
+!
+!
+ip arp inspection vlan 1
+!
+!
+ip dhcp snooping vlan 1
+no ip dhcp snooping information option
+ip dhcp snooping
+!
+!
+!
+spanning-tree mode rapid-pvst
+spanning-tree extend system-id
+!
+vlan internal allocation policy ascending
+!
+vlan 11
+ name FIRST_VLAN
+!
+ --More--         vlan 21
+ name SECOND_VLAN
+no cdp run
+!
+!
+!
+!
+!
+!
+interface FastEthernet0/1
+ ip arp inspection trust
+ ip dhcp snooping trust
+!
+interface FastEthernet0/2
+!
+interface FastEthernet0/3
+ switchport mode access
+ switchport nonegotiate
+ switchport port-security maximum 2
+ switchport port-security violation restrict
+ switchport port-security mac-address sticky
+ switchport port-security mac-address sticky 9c7b.ef3a.983d
+ switchport port-security aging time 5
+ --More--          switchport port-security
+ spanning-tree bpduguard enable
+ spanning-tree guard root
+ ip verify source
+!
+interface FastEthernet0/4
+!
+interface FastEthernet0/5
+!
+interface FastEthernet0/6
+!
+interface FastEthernet0/7
+!
+interface FastEthernet0/8
+!
+interface FastEthernet0/9
+!
+interface FastEthernet0/10
+!
+interface FastEthernet0/11
+!
+interface FastEthernet0/12
+!
+ --More--         interface FastEthernet0/13
+!
+interface FastEthernet0/14
+!
+interface FastEthernet0/15
+!
+interface FastEthernet0/16
+!
+interface FastEthernet0/17
+!
+interface FastEthernet0/18
+!
+interface FastEthernet0/19
+!
+interface FastEthernet0/20
+!
+interface FastEthernet0/21
+!
+interface FastEthernet0/22
+!
+interface FastEthernet0/23
+!
+interface FastEthernet0/24
+ --More--         !
+interface GigabitEthernet0/1
+ ip dhcp snooping trust
+!
+interface GigabitEthernet0/2
+!
+interface Vlan1
+ ip address dhcp
+!
+ip http server
+ip http secure-server
+!
+!
+line con 0
+line vty 5 15
+!
+end
+
+S1#        

@@ -1,0 +1,17 @@
+cd ~/lab.support.files/scripts/
+./configure_as_static.sh
+ip addr
+ping -c 4 192.168.1.1
+ssh -l user01 192.168.1.1
+
+nano ~/.ssh/config
+Host 192.168.1.1
+    KexAlgorithms +diffie-hellman-group1-sha1
+    Ciphers +aes128-cbc
+    HostKeyAlgorithms +ssh-rsa
+CTRL+X Yes enter
+
+ssh -l admin 192.168.1.1
+cd
+sudo systemctl start freeradius.service
+sudo systemctl status freeradius.service

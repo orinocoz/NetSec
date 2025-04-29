@@ -1,0 +1,131 @@
+end
+R2#show run
+Jan 31 11:34:29.683: %SYS-5-CONFIG_I: Configured from console by console
+Building configuration...
+
+Current configuration : 1583 bytes
+!
+! Last configuration change at 11:34:29 UTC Sun Jan 31 2021
+!
+version 15.7
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+!
+hostname R2
+!
+boot-start-marker
+boot-end-marker
+!
+!
+!
+no aaa new-model
+memory-size iomem 15
+!
+!
+!
+!
+ --More--         !
+!
+!
+!
+!
+!
+!
+!
+ip cef
+no ipv6 cef
+!
+multilink bundle-name authenticated
+!
+!
+key chain NetAcad
+ key 1
+  key-string NetAcad
+  cryptographic-algorithm hmac-sha-256
+!
+!
+license udi pid CISCO1941/K9 sn FGL2227801E
+license boot module c1900 technology-package securityk9
+!
+ --More--         !
+!
+redundancy
+!
+!
+!
+!
+!
+! 
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Embedded-Service-Engine0/0
+ no ip address
+ shutdown
+!
+interface GigabitEthernet0/0
+ --More--          ip address 10.1.1.2 255.255.255.252
+ ip ospf authentication key-chain NetAcad
+ duplex auto
+ speed auto
+!
+interface GigabitEthernet0/1
+ ip address 10.2.2.2 255.255.255.252
+ ip ospf authentication key-chain NetAcad
+ duplex auto
+ speed auto
+!
+interface Serial0/0/0
+ no ip address
+ shutdown
+ clock rate 2000000
+!
+interface Serial0/0/1
+ no ip address
+ shutdown
+ clock rate 2000000
+!
+router ospf 1
+ network 10.1.1.0 0.0.0.3 area 0
+ --More--          network 10.2.2.0 0.0.0.3 area 0
+!
+ip forward-protocol nd
+!
+no ip http server
+no ip http secure-server
+!
+!
+!
+!
+!
+control-plane
+!
+!
+line con 0
+line aux 0
+line 2
+ no activation-character
+ no exec
+ transport preferred none
+ transport output pad telnet rlogin lapb-ta mop udptn v120 ssh
+ stopbits 1
+line vty 0 4
+ --More--          login
+ transport input none
+!
+scheduler allocate 20000 1000
+ntp authentication-key 1 md5 002A2736 7
+ntp authenticate
+ntp trusted-key 1
+ntp master 3
+!
+end
+
+R2#      

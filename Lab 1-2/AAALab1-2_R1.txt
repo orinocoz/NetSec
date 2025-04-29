@@ -1,0 +1,154 @@
+show run
+Building configuration...
+
+  
+Current configuration : 2395 bytes
+!
+! Last configuration change at 11:24:40 UTC Sun Jan 31 2021 by admin
+!
+version 15.7
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+!
+hostname R1
+!
+boot-start-marker
+boot-end-marker
+!
+!
+enable secret 9 $9$O.h/yHe84Qa7E.$hTmPFljAbJfHjRoFHMBHwFW2uyw4VCgAgWzuhmN1KuA
+!
+no aaa new-model
+memory-size iomem 10
+!
+!
+!
+ --More--         !
+!
+!
+!
+!
+!
+!
+!
+!
+ip domain name netsec.com
+ip cef
+no ipv6 cef
+!
+multilink bundle-name authenticated
+!
+!
+key chain NetAcad
+ key 1
+  key-string NetAcad
+  cryptographic-algorithm hmac-sha-256
+!
+!
+license udi pid CISCO1941/K9 sn FGL2227801L
+ --More--         license boot module c1900 technology-package securityk9
+!
+!
+username user secret 9 $9$7lgvukrq20DUk.$gi4D0Ih3fV0k1lju5bYo3BW2wBKSdkJsRVf2coru7yA
+username admin privilege 15 secret 9 $9$tQPOUBLcRr6Bg.$Rk2Gb/RBuWMpmtkXzAEW1os95ihJiLSlsbzn4wrxeQM
+!
+redundancy
+!
+!
+!
+!
+!
+! 
+!
+!
+!
+!
+!
+!
+!
+!
+ --More--         !
+interface Embedded-Service-Engine0/0
+ no ip address
+ shutdown
+!
+interface GigabitEthernet0/0
+ ip address 10.1.1.1 255.255.255.252
+ ip ospf authentication key-chain NetAcad
+ duplex auto
+ speed auto
+!
+interface GigabitEthernet0/1
+ ip address 192.168.1.1 255.255.255.0
+ duplex auto
+ speed auto
+!
+interface Serial0/0/0
+ no ip address
+ shutdown
+ clock rate 2000000
+!
+interface Serial0/0/1
+ no ip address
+ --More--          shutdown
+ clock rate 2000000
+!
+router ospf 1
+ passive-interface GigabitEthernet0/1
+ network 10.1.1.0 0.0.0.3 area 0
+ network 192.168.1.0 0.0.0.255 area 0
+!
+ip forward-protocol nd
+!
+no ip http server
+no ip http secure-server
+!
+ip ssh time-out 90
+ip ssh authentication-retries 2
+ip ssh version 2
+!
+ip access-list standard SNMP
+ permit 192.168.1.0 0.0.0.255
+!
+logging host 192.168.1.3
+!
+!
+ --More--         snmp-server group G v3 priv read RR write WW access SNMP
+snmp-server view RR system included
+snmp-server view RR interfaces included
+snmp-server view WW system included
+snmp-server view SNMP iso included
+!
+control-plane
+!
+banner motd ^CHello!!!^C
+!
+line con 0
+line aux 0
+line 2
+ no activation-character
+ no exec
+ transport preferred none
+ transport output pad telnet rlogin lapb-ta mop udptn v120 ssh
+ stopbits 1
+line vty 0 4
+ privilege level 15
+ password cisco
+ login local
+ transport input ssh
+ --More--         line vty 5 15
+ privilege level 15
+ password cisco
+ login local
+ transport input ssh
+!
+scheduler allocate 20000 1000
+ntp authentication-key 1 md5 04753F36 7
+ntp authenticate
+ntp trusted-key 1
+ntp server 10.1.1.2
+!
+end
+
+R1#    

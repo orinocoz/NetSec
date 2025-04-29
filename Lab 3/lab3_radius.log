@@ -1,0 +1,140 @@
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+!
+hostname R1
+!
+boot-start-marker
+boot-end-marker
+!
+!
+enable secret 8 $8$FNY2c9435sMM.E$uvnSMkfuCjltutneQUN0hQB1nYK8wi.ISMaEpUgnHMQ
+!
+aaa new-model
+!
+!
+aaa authentication login default group radius none
+aaa authentication login SSH_LINES group radius
+!
+!
+!
+!
+!
+aaa session-id common
+memory-size iomem 10
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+no ip domain lookup
+ip domain name netsec.com
+ip cef
+no ipv6 cef
+!
+multilink bundle-name authenticated
+!
+cts logging verbose
+!
+!
+license udi pid CISCO1941/K9 sn FGL223381XG
+!
+!
+username user01 secret 8 $8$U7ujiAy7x7Ktok$dhGv4E6jdFoDUtzAJ66/tIEu7jsBXz9Da0KVtCUhVx6
+username admin privilege 15 secret 8 $8$P9Nb.Kpgs2PD9E$NQyfb3nDV70erPUGs6GNkAbPhzPQIg3S8tEbGGAcEho
+!
+redundancy
+!
+!
+!
+!
+!
+! 
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Embedded-Service-Engine0/0
+ no ip address
+ shutdown
+!
+interface GigabitEthernet0/0
+ ip address 10.1.1.1 255.255.255.252
+ no shutdown
+ duplex auto
+ speed auto
+!
+interface GigabitEthernet0/1
+ ip address 192.168.1.1 255.255.255.0
+ no shutdown
+ duplex auto
+ speed auto
+!
+interface Serial0/0/0
+ no ip address
+ shutdown
+ clock rate 2000000
+!
+interface Serial0/0/1
+ no ip address
+ shutdown
+ clock rate 2000000
+!
+router ospf 1
+ passive-interface GigabitEthernet0/1
+ network 10.1.1.0 0.0.0.3 area 0
+ network 192.168.1.0 0.0.0.255 area 0
+!
+ip forward-protocol nd
+!
+no ip http server
+no ip http secure-server
+!
+ip route 0.0.0.0 0.0.0.0 10.1.1.2
+!
+!
+!
+!
+radius server NetSec
+ address ipv4 192.168.1.11 auth-port 1812 acct-port 1813
+ key $trongPass
+!
+!
+!
+control-plane
+!
+!
+!
+line con 0
+ exec-timeout 5 0
+ logging synchronous
+line aux 0
+ exec-timeout 5 0
+line 2
+ no activation-character
+ no exec
+ transport preferred none
+ transport output pad telnet rlogin lapb-ta mop udptn v120 ssh
+ stopbits 1
+ line vty 0 4
+ exec-timeout 5 0
+ login authentication SSH_LINES
+ transport input ssh
+!
+scheduler allocate 20000 1000
+!
+end
