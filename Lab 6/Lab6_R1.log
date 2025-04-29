@@ -1,0 +1,140 @@
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+!
+hostname R1
+!
+boot-start-marker
+boot-end-marker
+!
+!
+security passwords min-length 10
+enable secret 9 $9$txBehB4eCis3y.$O2XGNkDPGWGosBaMMoiKF723vyUv/c.qA.ZWF625ii.
+!
+no aaa new-model
+memory-size iomem 15
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+no ip domain lookup
+ip domain name netsec.com
+ip cef
+no ipv6 cef
+!
+multilink bundle-name authenticated
+!
+cts logging verbose
+!
+!
+license udi pid CISCO1941/K9 sn FGL2227801K
+license boot module c1900 technology-package securityk9
+!
+!
+username admin01 secret 9 $9$RnBA63Ai2LfTXE$HGc5fhSrpiiFDzQL/bMJKNUrEGt4OAnqeyS5sU2bB9I
+!
+redundancy
+!
+!
+!
+!
+!
+! 
+!
+crypto isakmp policy 10
+ encr aes 256
+ authentication pre-share
+ group 24
+ lifetime 3600
+crypto isakmp key ciscocisco address 10.2.2.1       
+!
+crypto ipsec security-association lifetime seconds 1800
+!
+crypto ipsec transform-set R1-R3 esp-aes 256 esp-sha-hmac 
+ mode tunnel
+!
+!
+!
+crypto map CMAP 10 ipsec-isakmp 
+ set peer 10.2.2.1
+ set security-association lifetime seconds 900
+ set transform-set R1-R3 
+ set pfs group24
+ match address 101
+!
+!
+!
+!
+!
+interface Embedded-Service-Engine0/0
+ no ip address
+ shutdown
+!
+interface GigabitEthernet0/0
+ ip address 10.1.1.1 255.255.255.252
+ no shutdown
+ duplex auto
+ speed auto
+ crypto map CMAP
+!
+interface GigabitEthernet0/1
+ ip address 192.168.1.1 255.255.255.0
+ no shutdown
+ duplex auto
+ speed auto
+!
+interface Serial0/0/0
+ no ip address
+ shutdown
+ clock rate 2000000
+!
+interface Serial0/0/1
+ no ip address
+ shutdown
+ clock rate 2000000
+!
+router ospf 101
+ network 10.1.1.0 0.0.0.3 area 0
+ network 192.168.1.0 0.0.0.255 area 0
+!
+ip forward-protocol nd
+!
+no ip http server
+no ip http secure-server
+!
+ip ssh version 2
+!
+!
+!
+access-list 101 permit ip 192.168.1.0 0.0.0.255 192.168.3.0 0.0.0.255
+!
+control-plane
+!
+!
+line con 0
+ exec-timeout 5 0
+ logging synchronous
+ login local
+line aux 0
+line 2
+ no activation-character
+ no exec
+ transport preferred none
+ transport output pad telnet rlogin lapb-ta mop udptn v120 ssh
+ stopbits 1
+line vty 0 4
+ exec-timeout 5 0
+ login local
+ transport input ssh
+!
+scheduler allocate 20000 1000
+!
+end

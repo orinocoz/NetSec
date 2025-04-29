@@ -1,2 +1,2 @@
-# ** Welcome to Net Sec !! ** 
+# **Welcome to Net Sec !!** 
 ## All labs are segregated into different folders ##
