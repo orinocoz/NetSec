@@ -1,0 +1,7 @@
+Use topology from lab 4.4.7.
+
+1. Routers should send logs to both PC. Exclude debug and informational messages. Check if logs reach destination with Wireshark.
+2. R2 should be NTP server, R1 and R3 should be NTP clients. NTP should use authentication.
+3. On R1 and R3 create SNMPv3 user that can read all information about "system" and "interfaces" and can change information in "system" subtree. SNMP messages should be encrypted. For testing use MIBBrowser and Wireshark.
+
+Info and command examples: https://www.cisco.com/c/en/us/support/docs/ip/access-lists/13608-21.html
