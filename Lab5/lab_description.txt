@@ -1,0 +1,13 @@
+Use topology from lab 4.4.7.
+
+1. Configure DHCP on R1 and R3
+2. Get IP on PCs via DHCP
+3. Configure dhcp snooping on switches
+4. Check that you still can get IPs on PCs, check dhcp snooping bindings on switches
+5. Configure ARP inspection on switches
+6. Configure IP source guard of switches
+7. Disable VTP/DTP/CDP on switches
+8. Configure STP security features on switches: BPDU guard, root guard
+9. Configure port-security on switches
+
+Use https://www.cisco.com/c/en/us/support/docs/ip/access-lists/13608-21.html for inspiration.
