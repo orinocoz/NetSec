@@ -1,0 +1,10 @@
+Using topology from lab 4.4.7.
+
+Replace R3 with Cisco ASA, let it be FW3. Establish policy-based IPsec between R1 and FW3. 
+Use this for inspiration: https://www.cisco.com/c/en/us/support/docs/security-vpn/ipsec-negotiation-ike-protocols/214230-configure-policy-based-and-route-based-v.html#anc9
+
+In case router doesn't support DH group 1-5, you have to use ikev2. 
+Use this for inspiration: https://www.cisco.com/c/en/us/support/docs/security-vpn/ipsec-negotiation-ike-protocols/117337-config-asa-router-00.html.
+
+Create loopback interface on R2. Establish route-based IPsec between R1 and R2. 
+Traffic between PC-A and R2 loopback should go via this tunnel. Use this for inspiration: https://www.cisco.com/en/US/technologies/tk583/tk372/technologies_white_paper0900aecd8029d629.html
