@@ -1,0 +1,147 @@
+show run
+Building configuration...
+
+Current configuration : 1887 bytes
+!
+! Last configuration change at 17:50:49 UTC Mon May 19 2025
+!
+version 15.7
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+!
+hostname R2
+!
+boot-start-marker
+boot-end-marker
+!
+!
+!
+no aaa new-model
+memory-size iomem 15
+!
+!
+!
+!
+ --More--         !
+!
+!
+!
+!
+!
+!
+!
+ip cef
+no ipv6 cef
+!
+multilink bundle-name authenticated
+!
+!
+!
+license udi pid CISCO1941/K9 sn FGL22278000
+!
+!
+!
+redundancy
+!
+!
+!
+ --More--         !
+!
+!
+policy-map FOO
+ class class-default
+  shape average 128000   
+!
+! 
+!
+crypto isakmp policy 1
+ encr aes
+ authentication pre-share
+ group 2
+ lifetime 3600
+!
+crypto isakmp policy 10
+crypto isakmp key cisco address 10.1.1.1       
+!
+!
+crypto ipsec transform-set R1R2 esp-aes esp-sha-hmac 
+ mode tunnel
+!
+crypto ipsec profile VTI
+ --More--          set transform-set R1R2 
+!
+!
+!
+!
+!
+!
+!
+interface Loopback1
+ ip address 10.3.3.1 255.255.255.252
+!
+interface Tunnel0
+ ip address 192.168.10.2 255.255.255.0
+ tunnel source 10.1.1.2
+ tunnel mode ipsec ipv4
+ tunnel destination 10.1.1.1
+ tunnel protection ipsec profile VTI
+!
+interface Embedded-Service-Engine0/0
+ no ip address
+ shutdown
+!
+interface GigabitEthernet0/0
+ --More--          ip address 10.1.1.2 255.255.255.252
+ duplex auto
+ speed auto
+!
+interface GigabitEthernet0/1
+ ip address 10.2.2.2 255.255.255.252
+ duplex auto
+ speed auto
+!
+interface Serial0/0/0
+ no ip address
+ shutdown
+ clock rate 2000000
+!
+interface Serial0/0/1
+ no ip address
+ shutdown
+ clock rate 2000000
+!
+router ospf 1
+ network 10.1.1.0 0.0.0.3 area 0
+ network 10.2.2.0 0.0.0.3 area 0
+!
+ --More--         ip forward-protocol nd
+!
+no ip http server
+no ip http secure-server
+!
+ip route 192.168.1.0 255.255.255.0 Tunnel0
+!
+!
+!
+!
+control-plane
+!
+!
+line con 0
+line aux 0
+line 2
+ no activation-character
+ no exec
+ transport preferred none
+ transport output pad telnet rlogin lapb-ta mop udptn v120 ssh
+ stopbits 1
+line vty 0 4
+ login
+ --More--          transport input none
+!
+scheduler allocate 20000 1000
+!
+end
+
+R2#        
